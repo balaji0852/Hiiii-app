@@ -1,8 +1,14 @@
-import 'package:Hiiii/main.dart';
+import 'package:Hiiii/Otp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'HiiiiReusableComponents/HiiiiAppTextField.dart';
 import 'SignUpPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'HiiiiReusableComponents/HiiiiAppBottomButton.dart';
+import 'HiiiiReusableComponents/HiiiiAppMiniButton.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,64 +16,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  String verificationId, phone;
   TextEditingController phoneNumber = TextEditingController();
 
-//Reusable component 2, hiiiiAppTextField
-  Container hiiiiAppTextField() {
-    return Container(
-      width: 280,
-      height: 70,
-      child: TextField(
-        maxLength: 14,
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        controller: phoneNumber,
-        cursorColor: Colors.black,
-        decoration: InputDecoration(
-            fillColor: HexColor('#8FFF29'),
-            filled: true,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-            hintText: '+91 XXXXXXXXXX'),
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 23,
-        ),
-      ),
-    );
-  }
-
-// Reusable component 1, hiiiiAppBottombutton
-  Container hiiiiAppBottomButton() {
-    return Container(
-      width: 330,
-      height: 60,
-      child: Material(
-        color: HexColor('#262626'),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: MaterialButton(
-            height: 55,
-            minWidth: 80,
-            child: Center(
-              child: Text(
-                'Create Account',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignUpPage()));
-            }),
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -79,9 +33,10 @@ class LoginPageState extends State<LoginPage> {
           children: [
             Expanded(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 40,
+                    height: 50,
                   ),
                   Text(
                     'Hey, Pal enter your mobile number...',
@@ -90,11 +45,31 @@ class LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  hiiiiAppTextField(),
+                  HiiiiAppTextField(
+                      height: 65,
+                      fontSize: 21,
+                      tEC: phoneNumber,
+                      hint: '+91 XXXXXXXXXX',
+                      maxLength: 14,
+                      textAlign: TextAlign.center,
+                      type: TextInputType.number,
+                      onchange: (value) {
+                        phone = value;
+                      }),
                   SizedBox(
                     height: 7,
                   ),
-                  hiiiiAppMiniButton('Send OTP'),
+                  HiiiiAppMiniButton(
+                      text: 'Send OTP',
+                      onchange: () {
+                        try {
+                          if (phone.length == 10) {
+                            accountPresenceChecker();
+                          }
+                        } on Exception {
+                          print(Exception);
+                        }
+                      }),
                   SizedBox(
                     height: 15,
                   ),
@@ -107,27 +82,71 @@ class LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            hiiiiAppBottomButton(),
+            HiiiiAppBottomButton(
+                text: 'Create Account',
+                onchange: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignUpPage()));
+                }),
           ],
         ),
       ),
     );
   }
-}
 
-// Reusable Component 3,hiiiAppMiniButton
-Container hiiiiAppMiniButton(String text) {
-  return Container(
-    height: 60,
-    width: 130,
-    child: MaterialButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: Text(
-        text,
-        style: TextStyle(color: Colors.white, fontSize: 17),
-      ),
-      color: HexColor('#262626'),
-      onPressed: () {},
-    ),
-  );
+  Future<void> verifyPhone() async {
+    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      this.verificationId = verId;
+    };
+
+    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
+      this.verificationId = verId;
+      print('otp sent');
+      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Otp(
+                    formData: [],
+                    verificationId: verificationId,
+                  )));
+    };
+
+    final PhoneVerificationCompleted verifiedSuccess =
+        (AuthCredential phoneAuthCredential) {
+      print(phoneAuthCredential);
+    };
+
+    final PhoneVerificationFailed veriFailed = (AuthException exception) {
+      print('${exception.message}');
+    };
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: '+91' + phone,
+        codeAutoRetrievalTimeout: autoRetrieve,
+        codeSent: smsCodeSent,
+        timeout: const Duration(seconds: 120),
+        verificationCompleted: verifiedSuccess,
+        verificationFailed: veriFailed);
+  }
+
+  Future<void> accountPresenceChecker() async {
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'https://hiiiiapp.azurewebsites.net/api/hiiiiaccountchecker/?phone=' +
+                phone));
+
+    http.StreamedResponse response = await request.send();
+
+    var jsonResponse =
+        convert.jsonDecode(await response.stream.bytesToString());
+
+    if (jsonResponse['status'] == 200) {
+      print('account exists');
+      verifyPhone();
+    } else {
+      print("Account doesn't exists");
+    }
+  }
 }

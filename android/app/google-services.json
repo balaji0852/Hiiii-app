@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "677624412893",
+    "project_id": "hyeapp-f9d84",
+    "storage_bucket": "hyeapp-f9d84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677624412893:android:71317f83f7d349ed64f934",
+        "android_client_info": {
+          "package_name": "com.example.Hiiii"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677624412893-jkhr0piaats73pal1ba41o1sk2gtv7sv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.Hiiii",
+            "certificate_hash": "667f24bf0f3f83a5b9fbeb204075e921794f6a20"
+          }
+        },
+        {
+          "client_id": "677624412893-tvglngqtkrv2al3fg48qd9rg8gp5l4bv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8WRkBpTp2-b2rZbnOXqvn2KrahQVnSLk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677624412893-tvglngqtkrv2al3fg48qd9rg8gp5l4bv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

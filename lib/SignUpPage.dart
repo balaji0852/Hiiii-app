@@ -1,6 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'HiiiiReusableComponents/HiiiiAppBottomButton.dart';
+import 'HiiiiReusableComponents/HiiiiAppTextField.dart';
+import 'HiiiiReusableComponents/HiiiiAppMiniButton2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'OTP.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -11,6 +18,10 @@ class SignUpPageState extends State<SignUpPage> {
   TextEditingController email = new TextEditingController();
   TextEditingController name = new TextEditingController();
   TextEditingController phoneNumber = new TextEditingController();
+  int bike = 0, bicycle = 0, car = 0;
+  String gender, verificationId;
+  String varName, varEmail, varPhone;
+  List<String> formData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +67,12 @@ class SignUpPageState extends State<SignUpPage> {
                           SizedBox(
                             width: 25,
                           ),
-                          hiiiiAppMiniButton2("policies", Colors.grey)
+                          HiiiiAppMiniButton2(
+                            text: "policies",
+                            color: Colors.grey,
+                            fontColor: Colors.black,
+                            onchange: () {},
+                          )
                         ],
                       ),
                       SizedBox(
@@ -71,7 +87,28 @@ class SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            hiiiiAppBottomButton()
+            HiiiiAppBottomButton(
+                text: 'Next',
+                onchange: () {
+                  try {
+                    if (varName.length != 0 &&
+                        varEmail.length != 0 &&
+                        varPhone.length == 10) {
+                      formData.add(name.text);
+                      formData.add(phoneNumber.text);
+                      formData.add(email.text);
+                      formData.add(gender);
+                      formData.add(bicycle.toString());
+                      formData.add(bike.toString());
+                      formData.add(car.toString());
+                      accountPresenceChecker();
+                    }
+                  } on Exception {
+                    print(Exception);
+                  }
+
+                  print(formData.toString());
+                })
           ],
         ),
       ),
@@ -94,22 +131,50 @@ class SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  hiiiiAppMiniButton2("+", Colors.white),
+                  HiiiiAppMiniButton2(
+                    text: "+",
+                    color: Colors.white,
+                    fontColor: Colors.black,
+                    onchange: () {},
+                  ),
                   SizedBox(
                     height: 12,
                   ),
-                  hiiiiAppTextField("Full name", name, TextInputType.name),
+                  HiiiiAppTextField(
+                      onchange: (value) {
+                        varName = value.toString();
+                      },
+                      height: 62,
+                      fontSize: 16,
+                      hint: "Full name",
+                      tEC: name,
+                      type: TextInputType.name,
+                      maxLength: 80,
+                      textAlign: TextAlign.left),
+                  HiiiiAppTextField(
+                      onchange: (value) {
+                        varPhone = value.toString();
+                      },
+                      height: 62,
+                      fontSize: 16,
+                      hint: "Phone number",
+                      tEC: phoneNumber,
+                      type: TextInputType.number,
+                      maxLength: 10,
+                      textAlign: TextAlign.left),
+                  HiiiiAppTextField(
+                      onchange: (value) {
+                        varEmail = value.toString();
+                      },
+                      height: 62,
+                      fontSize: 16,
+                      hint: "Email",
+                      tEC: email,
+                      type: TextInputType.emailAddress,
+                      maxLength: 80,
+                      textAlign: TextAlign.left),
                   SizedBox(
-                    height: 6,
-                  ),
-                  hiiiiAppTextField(
-                      "mobile number", phoneNumber, TextInputType.number),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  hiiiiAppTextField("Email", email, TextInputType.emailAddress),
-                  SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -118,7 +183,7 @@ class SignUpPageState extends State<SignUpPage> {
                         width: 25,
                       ),
                       Text(
-                        'Select your gender',
+                        'Select your gender (Optional)',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -130,15 +195,49 @@ class SignUpPageState extends State<SignUpPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      hiiiiAppMiniButton2("Male", Colors.blue),
+                      HiiiiAppMiniButton2(
+                        text: "Male",
+                        color: gender == "Male"
+                            ? HexColor('#8FFF29')
+                            : Colors.white,
+                        fontColor: Colors.black,
+                        onchange: () {
+                          setState(() {
+                            gender = "Male";
+                          });
+                        },
+                      ),
                       SizedBox(
                         width: 10,
                       ),
-                      hiiiiAppMiniButton2("Female", Colors.pinkAccent),
+                      HiiiiAppMiniButton2(
+                        text: "Female",
+                        color: gender == "Female"
+                            ? HexColor('#8FFF29')
+                            : Colors.white,
+                        fontColor: Colors.black,
+                        onchange: () {
+                          print('female');
+                          setState(() {
+                            gender = "Female";
+                          });
+                        },
+                      ),
                       SizedBox(
                         width: 10,
                       ),
-                      hiiiiAppMiniButton2("Others", Colors.white),
+                      HiiiiAppMiniButton2(
+                        text: "Others",
+                        color: gender == "Others"
+                            ? HexColor('#8FFF29')
+                            : Colors.white,
+                        fontColor: Colors.black,
+                        onchange: () {
+                          setState(() {
+                            gender = "Others";
+                          });
+                        },
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -151,7 +250,7 @@ class SignUpPageState extends State<SignUpPage> {
                         width: 25,
                       ),
                       Text(
-                        'Select the vehicles you own',
+                        'Select the vehicles you own (Optional)',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -163,15 +262,52 @@ class SignUpPageState extends State<SignUpPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      hiiiiAppMiniButton2("Bicycle", Colors.white),
+                      HiiiiAppMiniButton2(
+                          text: "Bicycle",
+                          fontColor: Colors.black,
+                          color:
+                              bicycle == 1 ? HexColor('#8FFF29') : Colors.white,
+                          onchange: () {
+                            setState(() {
+                              if (bicycle == 1) {
+                                bicycle = 0;
+                              } else {
+                                bicycle = 1;
+                              }
+                            });
+                          }),
                       SizedBox(
                         width: 10,
                       ),
-                      hiiiiAppMiniButton2("Bike", Colors.white),
+                      HiiiiAppMiniButton2(
+                          text: "Bike",
+                          fontColor: Colors.black,
+                          color: bike == 1 ? HexColor('#8FFF29') : Colors.white,
+                          onchange: () {
+                            setState(() {
+                              if (bike == 1) {
+                                bike = 0;
+                              } else {
+                                bike = 1;
+                              }
+                            });
+                          }),
                       SizedBox(
                         width: 10,
                       ),
-                      hiiiiAppMiniButton2("Car", Colors.white),
+                      HiiiiAppMiniButton2(
+                          text: "car",
+                          fontColor: Colors.black,
+                          color: car == 1 ? HexColor('#8FFF29') : Colors.white,
+                          onchange: () {
+                            setState(() {
+                              if (car == 1) {
+                                car = 0;
+                              } else {
+                                car = 1;
+                              }
+                            });
+                          }),
                     ],
                   )
                 ],
@@ -181,78 +317,59 @@ class SignUpPageState extends State<SignUpPage> {
         ));
   }
 
-  // Reusable Component 5,hiiiAppMiniButton
-  Container hiiiiAppMiniButton2(String text, Color color) {
-    return Container(
-      height: 40,
-      width: 85,
-      child: MaterialButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Text(
-          text,
-          style: TextStyle(color: Colors.black, fontSize: 15),
-        ),
-        color: color,
-        onPressed: () {},
-      ),
-    );
+  Future<void> verifyPhone() async {
+    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      this.verificationId = verId;
+    };
+
+    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
+      this.verificationId = verId;
+      print('otp sent');
+      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Otp(
+                    formData: formData,
+                    verificationId: verificationId,
+                  )));
+    };
+
+    final PhoneVerificationCompleted verifiedSuccess =
+        (AuthCredential phoneAuthCredential) {
+      print(phoneAuthCredential);
+    };
+
+    final PhoneVerificationFailed veriFailed = (AuthException exception) {
+      print('${exception.message}');
+    };
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: '+91' + phoneNumber.text,
+        codeAutoRetrievalTimeout: autoRetrieve,
+        codeSent: smsCodeSent,
+        timeout: const Duration(seconds: 120),
+        verificationCompleted: verifiedSuccess,
+        verificationFailed: veriFailed);
   }
 
-  //Reusable Component 2,hiiiiAppTextField
-  Container hiiiiAppTextField(
-      String hint, TextEditingController tEC, TextInputType type) {
-    return Container(
-      width: 280,
-      height: 60,
-      child: TextField(
-        keyboardType: type,
-        cursorColor: Colors.black,
-        controller: tEC,
-        decoration: InputDecoration(
-            fillColor: HexColor('#8FFF29'),
-            filled: true,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-            hintText: hint),
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 19,
-        ),
-      ),
-    );
-  }
+  Future<void> accountPresenceChecker() async {
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'https://hiiiiapp.azurewebsites.net/api/hiiiiaccountchecker/?phone=' +
+                phoneNumber.text));
 
-// Reusable component 1, hiiiiAppBottombutton
-  Container hiiiiAppBottomButton() {
-    return Container(
-      width: 330,
-      height: 60,
-      child: Material(
-        color: HexColor('#262626'),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: MaterialButton(
-            height: 55,
-            minWidth: 80,
-            child: Center(
-              child: Text(
-                'Next',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            onPressed: () {
-              // Navigator.of(context).pop();
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (context) => MyHomePage()));
-            }),
-      ),
-    );
+    http.StreamedResponse response = await request.send();
+
+    var jsonResponse =
+        convert.jsonDecode(await response.stream.bytesToString());
+
+    if (jsonResponse['status'] == 200) {
+      print('account exists');
+    } else {
+      print("Account doesn't exists");
+      verifyPhone();
+    }
   }
 }
