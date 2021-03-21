@@ -12,6 +12,7 @@ class HiiiiAppTextField extends StatelessWidget {
       this.maxLength,
       this.textAlign,
       this.height,
+      this.enabled,
       this.fontSize});
 
   final TextInputType type;
@@ -22,6 +23,7 @@ class HiiiiAppTextField extends StatelessWidget {
   final TextAlign textAlign;
   final double height;
   final double fontSize;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +37,13 @@ class HiiiiAppTextField extends StatelessWidget {
         cursorColor: Colors.black,
         textAlign: textAlign,
         controller: tEC,
+        enabled: enabled,
         decoration: InputDecoration(
             fillColor: HexColor('#8FFF29'),
             filled: true,
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
             ),

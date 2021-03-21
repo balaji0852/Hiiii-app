@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'HiiiiReusableComponents/HiiiiAppTextField.dart';
 import 'SignUpPage.dart';
+import 'Home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'HiiiiReusableComponents/HiiiiAppBottomButton.dart';
 import 'HiiiiReusableComponents/HiiiiAppMiniButton.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:loading/loading.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,7 +20,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  String verificationId, phone;
+  String verificationId, phone, toast = '';
+  bool flag = false;
   TextEditingController phoneNumber = TextEditingController();
 
   @override
@@ -46,6 +51,7 @@ class LoginPageState extends State<LoginPage> {
                     height: 10,
                   ),
                   HiiiiAppTextField(
+                      enabled: true,
                       height: 65,
                       fontSize: 21,
                       tEC: phoneNumber,
@@ -59,11 +65,21 @@ class LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 7,
                   ),
+                  Text(
+                    toast,
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
                   HiiiiAppMiniButton(
                       text: 'Send OTP',
                       onchange: () {
                         try {
-                          if (phone.length == 10) {
+                          if (phone.length == 10 && !flag) {
+                            print('account');
+                            SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
+                            setState(() {
+                              flag = true;
+                            });
                             accountPresenceChecker();
                           }
                         } on Exception {
@@ -78,7 +94,15 @@ class LoginPageState extends State<LoginPage> {
                     child: Container(
                       color: HexColor('#8FFF29'),
                     ),
-                  )
+                  ),
+                  flag
+                      ? Loading(
+                          indicator: BallPulseIndicator(),
+                          size: 100.0,
+                          color: HexColor('#8FFF29'))
+                      : SizedBox(
+                          height: 1,
+                        ),
                 ],
               ),
             ),
@@ -102,19 +126,32 @@ class LoginPageState extends State<LoginPage> {
     final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
       this.verificationId = verId;
       print('otp sent');
+      setState(() {
+        flag = false;
+      });
       Navigator.pop(context);
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => Otp(
-                    formData: [],
-                    verificationId: verificationId,
-                  )));
+                  formData: [],
+                  verificationId: verificationId,
+                  credential: null)));
     };
 
     final PhoneVerificationCompleted verifiedSuccess =
-        (AuthCredential phoneAuthCredential) {
-      print(phoneAuthCredential);
+        (AuthCredential phoneAuthCredential) async {
+      await FirebaseAuth.instance
+          .signInWithCredential(phoneAuthCredential)
+          .then((user) async {
+        print('auto verifying successful...');
+        print('loggged in successfully....');
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home()));
+      }).catchError((e) {
+        print(e);
+      });
     };
 
     final PhoneVerificationFailed veriFailed = (AuthException exception) {
@@ -122,10 +159,10 @@ class LoginPageState extends State<LoginPage> {
     };
 
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '+91' + phone,
+        phoneNumber: '+91' + phoneNumber.text,
         codeAutoRetrievalTimeout: autoRetrieve,
         codeSent: smsCodeSent,
-        timeout: const Duration(seconds: 120),
+        timeout: const Duration(seconds: 0),
         verificationCompleted: verifiedSuccess,
         verificationFailed: veriFailed);
   }
@@ -144,8 +181,13 @@ class LoginPageState extends State<LoginPage> {
 
     if (jsonResponse['status'] == 200) {
       print('account exists');
+
       verifyPhone();
     } else {
+      setState(() {
+        toast = "Account doesn't exist";
+        flag = false;
+      });
       print("Account doesn't exists");
     }
   }

@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'HiiiiReusableComponents/HiiiiAppBottomButton.dart';
+import 'HiiiiReusableComponents/HiiiiAppEmailVerification.dart';
+import 'HiiiiReusableComponents/HiiiiAppAppBar.dart';
 import 'HiiiiReusableComponents/HiiiiAppTextField.dart';
 import 'HiiiiReusableComponents/HiiiiAppMiniButton2.dart';
 import 'package:http/http.dart' as http;
@@ -32,57 +34,83 @@ class ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    accountPresenceChecker();
+    name.text = "Balaji Rajkumar";
+    phoneNumber.text = "+91 8151033423";
+    // accountPresenceChecker();
     // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.black,
       body: Scrollbar(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            child: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Account details',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: HexColor('#8FFF29'),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                hiiiiAppform(),
-                HiiiiAppMiniButton2(
-                  color: HexColor('#262626'),
-                  fontColor: Colors.white,
-                  text: 'save',
-                  onchange: () {},
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                HiiiiAppMiniButton2(
-                  color: HexColor('#262626'),
-                  fontColor: Colors.white,
-                  text: 'logout',
-                  onchange: () {
-                    FirebaseAuth.instance.signOut().then((value) {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyHomePage()));
-                    });
-                  },
-                )
-              ],
-            )),
-          ),
-        ),
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              height: 25,
+            ),
+            HiiiiAppAppBar(
+              onchange: () {},
+              title: 'Profile',
+            ),
+            CircleAvatar(
+              backgroundColor: HexColor('#262626'),
+              radius: 45,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            HiiiiAppTextField(
+                onchange: (value) {
+                  varName = value.toString();
+                },
+                enabled: true,
+                height: 62,
+                fontSize: 16,
+                hint: "Full name",
+                tEC: name,
+                type: TextInputType.name,
+                maxLength: 80,
+                textAlign: TextAlign.left),
+            HiiiiAppTextField(
+                onchange: (value) {},
+                enabled: false,
+                height: 62,
+                fontSize: 16,
+                hint: "",
+                tEC: phoneNumber,
+                type: TextInputType.name,
+                maxLength: 14,
+                textAlign: TextAlign.left),
+            HiiiiAppEmailVerification(
+              email: "balajikumar189@gmail.com",
+              verified: false,
+              onchange: (value) {},
+              onpress: () {},
+            )
+            // hiiiiAppform(),
+            // HiiiiAppMiniButton2(
+            //   color: HexColor('#262626'),
+            //   fontColor: Colors.white,
+            //   text: 'save',
+            //   onchange: () {},
+            // ),
+            // SizedBox(
+            //   height: 10,
+            // ),
+            // HiiiiAppMiniButton2(
+            //   color: HexColor('#262626'),
+            //   fontColor: Colors.white,
+            //   text: 'logout',
+            //   onchange: () {
+            //     // try{
+            //     FirebaseAuth.instance.signOut();
+            //     Navigator.of(context).pop();
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (context) => MyHomePage()));
+            //   },
+            // )
+          ],
+        )),
       ),
     );
   }

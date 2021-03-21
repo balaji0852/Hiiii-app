@@ -8,6 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'OTP.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:loading/loading.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
+import 'package:flutter/services.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -20,8 +23,9 @@ class SignUpPageState extends State<SignUpPage> {
   TextEditingController phoneNumber = new TextEditingController();
   int bike = 0, bicycle = 0, car = 0;
   String gender, verificationId;
-  String varName, varEmail, varPhone;
+  String varName, varEmail, varPhone, toast = '';
   List<String> formData = [];
+  bool flag = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +64,18 @@ class SignUpPageState extends State<SignUpPage> {
                       SizedBox(
                         height: 10,
                       ),
+                      Text(
+                        toast,
+                        style: TextStyle(color: Colors.red, fontSize: 12),
+                      ),
+                      flag
+                          ? Loading(
+                              indicator: BallPulseIndicator(),
+                              size: 100.0,
+                              color: HexColor('#8FFF29'))
+                          : SizedBox(
+                              height: 1,
+                            ),
                       hiiiiAppform(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,6 +110,10 @@ class SignUpPageState extends State<SignUpPage> {
                     if (varName.length != 0 &&
                         varEmail.length != 0 &&
                         varPhone.length == 10) {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      setState(() {
+                        flag = true;
+                      });
                       formData.add(name.text);
                       formData.add(phoneNumber.text);
                       formData.add(email.text);
@@ -104,6 +124,9 @@ class SignUpPageState extends State<SignUpPage> {
                       accountPresenceChecker();
                     }
                   } on Exception {
+                    setState(() {
+                      flag = false;
+                    });
                     print(Exception);
                   }
 
@@ -141,6 +164,7 @@ class SignUpPageState extends State<SignUpPage> {
                     height: 12,
                   ),
                   HiiiiAppTextField(
+                      enabled: true,
                       onchange: (value) {
                         varName = value.toString();
                       },
@@ -152,6 +176,7 @@ class SignUpPageState extends State<SignUpPage> {
                       maxLength: 80,
                       textAlign: TextAlign.left),
                   HiiiiAppTextField(
+                      enabled: true,
                       onchange: (value) {
                         varPhone = value.toString();
                       },
@@ -163,6 +188,7 @@ class SignUpPageState extends State<SignUpPage> {
                       maxLength: 10,
                       textAlign: TextAlign.left),
                   HiiiiAppTextField(
+                      enabled: true,
                       onchange: (value) {
                         varEmail = value.toString();
                       },
@@ -330,25 +356,43 @@ class SignUpPageState extends State<SignUpPage> {
           context,
           MaterialPageRoute(
               builder: (context) => Otp(
-                    formData: formData,
-                    verificationId: verificationId,
-                  )));
+                  formData: formData,
+                  verificationId: verificationId,
+                  credential: null)));
     };
 
     final PhoneVerificationCompleted verifiedSuccess =
-        (AuthCredential phoneAuthCredential) {
-      print(phoneAuthCredential);
+        (AuthCredential phoneAuthCredential) async {
+      await FirebaseAuth.instance
+          .signInWithCredential(phoneAuthCredential)
+          .then((user) async {
+        print('auto verifying successful...');
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Otp(
+                    formData: formData,
+                    verificationId: verificationId,
+                    credential: phoneAuthCredential)));
+      }).catchError((e) {
+        print(e);
+      });
     };
 
     final PhoneVerificationFailed veriFailed = (AuthException exception) {
       print('${exception.message}');
+      setState(() {
+        toast = "Please try again later";
+        flag = false;
+      });
     };
 
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: '+91' + phoneNumber.text,
         codeAutoRetrievalTimeout: autoRetrieve,
         codeSent: smsCodeSent,
-        timeout: const Duration(seconds: 120),
+        timeout: const Duration(seconds: 0),
         verificationCompleted: verifiedSuccess,
         verificationFailed: veriFailed);
   }
@@ -367,8 +411,11 @@ class SignUpPageState extends State<SignUpPage> {
 
     if (jsonResponse['status'] == 200) {
       print('account exists');
+      setState(() {
+        toast = "Account exist already";
+        flag = false;
+      });
     } else {
-      print("Account doesn't exists");
       verifyPhone();
     }
   }
