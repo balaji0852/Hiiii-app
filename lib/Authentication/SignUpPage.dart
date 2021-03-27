@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'HiiiiReusableComponents/HiiiiAppBottomButton.dart';
-import 'HiiiiReusableComponents/HiiiiAppTextField.dart';
-import 'HiiiiReusableComponents/HiiiiAppMiniButton2.dart';
+import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppBottomButton.dart';
+import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppTextField.dart';
+import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppMiniButton2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'OTP.dart';
 import 'package:http/http.dart' as http;

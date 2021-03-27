@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'Home.dart';
-import 'LoginPage.dart';
+import 'package:Hiiii/Home.dart';
+import 'package:Hiiii/Authentication/LoginPage.dart';
 import 'Profile.dart';
 import 'HiiiiReusableComponents/HiiiiAppBottomButton.dart';
 import 'HiiiiReusableComponents/HiiiiAppTitleBlocks.dart';

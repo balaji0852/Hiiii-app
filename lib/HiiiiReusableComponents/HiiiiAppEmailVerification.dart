@@ -9,11 +9,11 @@ class HiiiiAppEmailVerification extends StatelessWidget {
   final Function onpress;
   final bool verified;
   final String email;
-
-  TextEditingController emailTEC = new TextEditingController();
+  final TextEditingController emailTEC = new TextEditingController();
 
   HiiiiAppEmailVerification(
       {this.onchange, this.onpress, this.verified, this.email});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -26,7 +26,7 @@ class HiiiiAppEmailVerification extends StatelessWidget {
           fontSize: 16,
           hint: "",
           tEC: emailTEC,
-          type: TextInputType.name,
+          type: TextInputType.emailAddress,
           maxLength: 80,
           textAlign: TextAlign.left);
     }
@@ -41,7 +41,7 @@ class HiiiiAppEmailVerification extends StatelessWidget {
             height: 10,
           ),
           Text(
-            "Enter your email",
+            "Enter valid email ",
             style: TextStyle(color: Colors.white, fontSize: 12),
           ),
           SizedBox(
@@ -54,7 +54,7 @@ class HiiiiAppEmailVerification extends StatelessWidget {
               fontSize: 16,
               hint: "Email",
               tEC: emailTEC,
-              type: TextInputType.name,
+              type: TextInputType.emailAddress,
               maxLength: 14,
               textAlign: TextAlign.left),
           HiiiiAppMiniButton2(
