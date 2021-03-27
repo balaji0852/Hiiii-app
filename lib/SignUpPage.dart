@@ -45,7 +45,7 @@ class SignUpPageState extends State<SignUpPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Paper Work',
+                            'Paper Works',
                             style: TextStyle(
                               fontSize: 17,
                               color: HexColor('#8FFF29'),
