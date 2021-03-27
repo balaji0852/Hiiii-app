@@ -86,6 +86,14 @@ class ProfileState extends State<Profile> {
               onchange: (value) {},
               onpress: () {},
             ),
+            Row(
+              children: [
+                Text(
+                  'hell world',
+                  style: TextStyle(color: HexColor('#262626')),
+                )
+              ],
+            )
           ],
         )),
       ),
