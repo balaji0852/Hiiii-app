@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+//Unwanted page 
 class SamplePages extends StatefulWidget {
   SamplePages({this.message});
   final String message;
