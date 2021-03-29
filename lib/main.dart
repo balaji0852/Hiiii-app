@@ -1,8 +1,10 @@
+import 'package:Hiiii/MainPages/PostPage.dart';
+import 'package:Hiiii/MainPages/RidePage.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:Hiiii/Home.dart';
 import 'package:Hiiii/Authentication/LoginPage.dart';
-import 'Profile.dart';
+import 'MainPages/Profile.dart';
 import 'HiiiiReusableComponents/HiiiiAppBottomButton.dart';
 import 'HiiiiReusableComponents/HiiiiAppTitleBlocks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Profile(),
+      home: MyHomePage(),
     );
   }
 }

@@ -61,6 +61,7 @@ class OtpState extends State<Otp> {
                   ),
                   // hiiiiAppTextField(),
                   HiiiiAppTextField(
+                      maxLines: 1,
                       type: TextInputType.number,
                       tEC: phoneNumber,
                       hint: 'XXXXXX',

@@ -51,6 +51,7 @@ class LoginPageState extends State<LoginPage> {
                     height: 10,
                   ),
                   HiiiiAppTextField(
+                      maxLines: 1,
                       enabled: true,
                       height: 65,
                       fontSize: 21,

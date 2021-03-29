@@ -10,7 +10,6 @@ class HiiiiAppTitleBlocks extends StatelessWidget {
   final String title, color;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Material(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       color: HexColor(color),

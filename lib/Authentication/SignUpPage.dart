@@ -164,6 +164,7 @@ class SignUpPageState extends State<SignUpPage> {
                     height: 12,
                   ),
                   HiiiiAppTextField(
+                      maxLines: 1,
                       enabled: true,
                       onchange: (value) {
                         varName = value.toString();
@@ -176,6 +177,7 @@ class SignUpPageState extends State<SignUpPage> {
                       maxLength: 80,
                       textAlign: TextAlign.left),
                   HiiiiAppTextField(
+                      maxLines: 1,
                       enabled: true,
                       onchange: (value) {
                         varPhone = value.toString();
@@ -188,6 +190,7 @@ class SignUpPageState extends State<SignUpPage> {
                       maxLength: 10,
                       textAlign: TextAlign.left),
                   HiiiiAppTextField(
+                      maxLines: 1,
                       enabled: true,
                       onchange: (value) {
                         varEmail = value.toString();

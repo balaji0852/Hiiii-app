@@ -13,8 +13,9 @@ class HiiiiAppTextField extends StatelessWidget {
       this.textAlign,
       this.height,
       this.enabled,
-      this.fontSize});
-
+      this.fontSize,
+      this.maxLines});
+  final int maxLines;
   final TextInputType type;
   final TextEditingController tEC;
   final String hint;
@@ -27,6 +28,39 @@ class HiiiiAppTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (maxLines != 1) {
+      return Container(
+        width: 280,
+        height: height,
+        child: TextFormField(
+          maxLines: maxLines,
+          maxLength: maxLength,
+          keyboardType: type,
+          cursorColor: Colors.black,
+          textAlign: textAlign,
+          controller: tEC,
+          enabled: enabled,
+          decoration: InputDecoration(
+              fillColor: HexColor('#8FFF29'),
+              filled: true,
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              hintText: hint),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: fontSize,
+          ),
+          onChanged: onchange,
+        ),
+      );
+    }
     // TODO: implement build
     return Container(
       width: 280,
