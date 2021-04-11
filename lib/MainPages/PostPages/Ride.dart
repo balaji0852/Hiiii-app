@@ -1,11 +1,14 @@
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppMiniButton.dart';
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppTextField.dart';
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppToggleSwitch.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:http/http.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppTimePicker.dart';
+import 'package:Hiiii/MainPages/values.dart';
 
 class Ride extends StatefulWidget {
   @override
@@ -16,22 +19,13 @@ class RideState extends State<Ride> {
   TextEditingController from = new TextEditingController();
   TextEditingController to = new TextEditingController();
   TextEditingController rideDescription = new TextEditingController();
-  int vehicle = 0, seat = 0;
-  List<String> vehiclesList = ['car', 'bike'];
-  List<String> seats = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12"
-  ];
+  String selectedTime,
+      time,
+      date,
+      fromLocation,
+      toLocation,
+      rideDescriptionString;
+  int vehicle = 1, seat = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +35,12 @@ class RideState extends State<Ride> {
         text('Fill the ride details', 15, Colors.white),
         br(5, 0),
         HiiiiAppTextField(
-            maxLines: 1,
+            maxLines: 2,
             enabled: true,
-            onchange: (value) {},
-            height: 62,
+            onchange: (value) {
+              fromLocation = value;
+            },
+            height: 80,
             fontSize: 16,
             hint: "From",
             tEC: from,
@@ -52,21 +48,29 @@ class RideState extends State<Ride> {
             maxLength: 255,
             textAlign: TextAlign.left),
         HiiiiAppTextField(
-            maxLines: 1,
+            maxLines: 2,
             enabled: true,
-            onchange: (value) {},
-            height: 62,
+            onchange: (value) {
+              toLocation = value;
+            },
+            height: 80,
             fontSize: 16,
             hint: "to",
             tEC: to,
             type: TextInputType.streetAddress,
             maxLength: 255,
             textAlign: TextAlign.left),
-        Container(
-          width: 300,
-          height: 100,
-          color: HexColor('#262626'),
-          child: Text('fawk time picker'),
+        HiiiiAppTimePicker(
+          onDateChange: (value) {
+            date = value.toString();
+          },
+          onTimeChange: (value) {
+            setState(() {
+              selectedTime = value;
+              time = value.toString();
+            });
+          },
+          selectedTime: selectedTime,
         ),
         br(15, 0),
         HiiiiAppToggleSwitch(
@@ -74,10 +78,9 @@ class RideState extends State<Ride> {
             setState(() {
               vehicle = index;
             });
-            print(vehicle);
           },
           initialIndex: vehicle,
-          items: vehiclesList,
+          items: ['car', 'bike'],
           title: 'vehicle',
         ),
         br(10, 0),
@@ -86,7 +89,9 @@ class RideState extends State<Ride> {
         HiiiiAppTextField(
             maxLines: 5,
             enabled: true,
-            onchange: (value) {},
+            onchange: (value) {
+              rideDescriptionString = value;
+            },
             height: 100,
             fontSize: 16,
             hint: "Ride Description",
@@ -97,7 +102,9 @@ class RideState extends State<Ride> {
         br(10, 0),
         HiiiiAppMiniButton(
           text: "Post",
-          onchange: () {},
+          onchange: () {
+            postRide();
+          },
         )
       ],
     );
@@ -116,7 +123,7 @@ class RideState extends State<Ride> {
       width: 330,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: seats
+        children: Values.seats
             .map((ele) => MaterialButton(
                   onPressed: () {
                     setState(() {
@@ -126,9 +133,10 @@ class RideState extends State<Ride> {
                   height: 10,
                   minWidth: 5,
                   color: ele == seat.toString()
-                      ? HexColor('#262626')
+                      ? HexColor('#8FFF29')
                       : Colors.black,
-                  child: text(ele.toString(), 14, Colors.white),
+                  child: text(ele.toString(), 14,
+                      ele == seat.toString() ? Colors.black : Colors.white),
                 ))
             .toList(),
       ),
@@ -143,5 +151,46 @@ class RideState extends State<Ride> {
         color: color,
       ),
     );
+  }
+
+  Future<void> postRide() async {
+    if (from.text.length > 0 &&
+        to.text.length > 0 &&
+        time.length > 0 &&
+        date.length > 0) {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+      var payload = convert.jsonEncode(<String, String>{
+        "eventTypeId": "1",
+        "eventTypeTag": "ride",
+        "vehicleType": vehicle == 0 ? 'car' : 'bike',
+        "from_": from.text,
+        "to_": to.text,
+        "noSeats": seat.toString(),
+        "rideDescription": rideDescription.text,
+        "uid": user.uid.toString(),
+        "rideStartDate": date.substring(0, 10) + " " + time
+      });
+
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request(
+          'POST',
+          Uri.parse(
+              'https://hiiiiappservice.azurewebsites.net/api/hiiiiappridepost'));
+      request.body = payload.toString();
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      var jsonResponse =
+          convert.jsonDecode(await response.stream.bytesToString());
+      String toast;
+      if (jsonResponse['status'] == 200) {
+        print('ride posted sucessfully');
+        toast = 'Your ride is posted succesfully...';
+      } else {
+        toast = 'please try again later';
+      }
+      final snackBar = SnackBar(content: Text(toast));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 }

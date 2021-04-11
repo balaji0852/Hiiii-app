@@ -21,11 +21,13 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_time_picker_spinner: ^1.0.6+1
   flutter:
     sdk: flutter
   hexcolor: ^1.0.6
   firebase_auth: ^0.14.0+5
   firebase_core: ^0.4.0+9
+  intl: ^0.16.1
   loading: ^1.0.2
   toggle_switch: "^0.1.9"
 
