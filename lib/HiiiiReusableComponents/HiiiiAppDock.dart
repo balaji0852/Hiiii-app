@@ -10,7 +10,6 @@ class HiiiiAppDock extends StatelessWidget {
   final List<Widget> children;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
         color: HexColor('#262626'),
         height: 70,

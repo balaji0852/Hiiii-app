@@ -1,15 +1,9 @@
-import 'package:Hiiii/MainPages/PostPage.dart';
-import 'package:Hiiii/MainPages/RidePage.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:Hiiii/Home.dart';
 import 'package:Hiiii/Authentication/LoginPage.dart';
-import 'MainPages/Profile.dart';
 import 'HiiiiReusableComponents/HiiiiAppBottomButton.dart';
 import 'HiiiiReusableComponents/HiiiiAppTitleBlocks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:loading/loading.dart';
-import 'package:loading/indicator/ball_pulse_indicator.dart';
 
 void main() => runApp(new MyApp());
 

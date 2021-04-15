@@ -1,18 +1,11 @@
-import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppMiniButton.dart';
-import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppTextField.dart';
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppTitleBlock2.dart';
-import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppToggleSwitch.dart';
 import 'package:Hiiii/MainPages/PostPages/Ride.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-
-import 'Profile.dart';
 
 class PostPage extends StatefulWidget {
   @override
@@ -45,7 +38,6 @@ class PostPageState extends State<PostPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     serviceListGetter();
   }
@@ -105,7 +97,7 @@ class PostPageState extends State<PostPage> {
   }
 
   Future<void> serviceListGetter() async {
-    FirebaseUser uid = await FirebaseAuth.instance.currentUser();
+    // FirebaseUser uid = await FirebaseAuth.instance.currentUser();
 
     var request = http.Request('GET',
         Uri.parse('https://hiiiiapp.azurewebsites.net/api/ServiceList?'));

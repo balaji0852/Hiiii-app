@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 // Reusable Component 6,HiiiAppDockItems
 class HiiiiAppDockItems extends StatelessWidget {

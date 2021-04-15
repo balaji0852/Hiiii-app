@@ -35,7 +35,7 @@ class RideState extends State<Ride> {
         text('Fill the ride details', 15, Colors.white),
         br(5, 0),
         HiiiiAppTextField(
-            maxLines: 2,
+            maxLines: 1,
             enabled: true,
             onchange: (value) {
               fromLocation = value;
@@ -48,7 +48,7 @@ class RideState extends State<Ride> {
             maxLength: 255,
             textAlign: TextAlign.left),
         HiiiiAppTextField(
-            maxLines: 2,
+            maxLines: 1,
             enabled: true,
             onchange: (value) {
               toLocation = value;

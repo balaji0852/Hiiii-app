@@ -16,7 +16,6 @@ class HiiiiAppEmailVerification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     if (verified) {
       emailTEC.text = email;
       return HiiiiAppTextField(

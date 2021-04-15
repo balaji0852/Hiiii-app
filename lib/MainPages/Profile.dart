@@ -1,11 +1,9 @@
-import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppMiniButton.dart';
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppToggleSwitch.dart';
 import 'package:Hiiii/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
-import '../HiiiiReusableComponents/HiiiiAppBottomButton.dart';
 import '../HiiiiReusableComponents/HiiiiAppEmailVerification.dart';
 import '../HiiiiReusableComponents/HiiiiAppAppBar.dart';
 import '../HiiiiReusableComponents/HiiiiAppTextField.dart';
@@ -13,7 +11,6 @@ import '../HiiiiReusableComponents/HiiiiAppMiniButton2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../Home.dart';
 
@@ -34,7 +31,6 @@ class ProfileState extends State<Profile> {
   int theme = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     theme = 0;
     accountPresenceChecker();

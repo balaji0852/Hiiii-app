@@ -2,7 +2,6 @@
 // titleblocks function provides moto stack blocks
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class HiiiiAppTitleBlock2 extends StatelessWidget {
   HiiiiAppTitleBlock2({
@@ -18,7 +17,6 @@ class HiiiiAppTitleBlock2 extends StatelessWidget {
   final Function onPressed;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Padding(
       padding: EdgeInsets.all(2),
       child: MaterialButton(

@@ -1,6 +1,6 @@
+import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppListViewWidgets/ListviewWidgetType1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 import 'Profile.dart';
 
@@ -12,7 +12,6 @@ class RidePage extends StatefulWidget {
 class RidePageState extends State<RidePage> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         backgroundColor: Colors.black,
         body: Column(
@@ -40,16 +39,37 @@ class RidePageState extends State<RidePage> {
               ],
             ),
             Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+                child: ListView(
               children: [
-                Text(
-                  "Hey Idiot, No rides found near you...",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+                ListviewWidgetType1(
+                  name: 'Balaji R',
+                  rating: '4.5',
+                  rideStart: '2021-04-21 08:00',
+                  rideDescription: 'Its wonderful ride to wonderla',
+                  from: 'R.T.Nagar',
+                  to: 'Wonderla bangalore',
+                  vehicleType: 'Car',
+                  seats: '10',
+                ),
+                ListviewWidgetType1(
+                  name: 'Balaji R',
+                  rating: '4.5',
+                  rideStart: '2021-04-21 08:00',
+                  rideDescription: 'Its wonderful ride to wonderla',
+                  from: 'R.T.Nagar',
+                  to: 'Wonderla bangalore',
+                  vehicleType: 'Car',
+                  seats: '10',
+                ),
+                ListviewWidgetType1(
+                  name: 'Balaji R',
+                  rating: '4.5',
+                  rideStart: '2021-04-21 08:00',
+                  rideDescription: 'Its wonderful ride to wonderla',
+                  from: 'R.T.Nagar',
+                  to: 'Wonderla bangalore',
+                  vehicleType: 'Car',
+                  seats: '10',
                 ),
               ],
             ))

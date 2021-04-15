@@ -50,6 +50,7 @@ class HomeState extends State<Home> {
                 color: Colors.white,
                 size: 26,
               ),
+              // ignore: deprecated_member_use
               title: Text(" ", style: TextStyle(fontSize: 1))),
           BottomNavigationBarItem(
               icon: Icon(
@@ -57,6 +58,7 @@ class HomeState extends State<Home> {
                 color: Colors.white,
                 size: 26,
               ),
+              // ignore: deprecated_member_use
               title: Text(" ", style: TextStyle(fontSize: 1))),
           BottomNavigationBarItem(
               icon: Icon(
@@ -64,6 +66,7 @@ class HomeState extends State<Home> {
                 color: Colors.white,
                 size: 26,
               ),
+              // ignore: deprecated_member_use
               title: Text(
                 " ",
                 style: TextStyle(fontSize: 1),
@@ -74,6 +77,7 @@ class HomeState extends State<Home> {
                 color: Colors.white,
                 size: 26,
               ),
+              // ignore: deprecated_member_use
               title: Text(" ", style: TextStyle(fontSize: 1))),
         ],
         currentIndex: body,

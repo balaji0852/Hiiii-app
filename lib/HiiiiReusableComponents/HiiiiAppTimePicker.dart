@@ -15,16 +15,17 @@ class HiiiiAppTimePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-              width: 175,
+              width: 160,
               child: DatePicker(DateTime.now(),
                   onDateChange: (value) => onDateChange(value))),
           SizedBox(
             width: 20,
           ),
           Container(
-              width: 175,
+              width: 160,
               height: 75,
               child: ListView(
                 scrollDirection: Axis.horizontal,
