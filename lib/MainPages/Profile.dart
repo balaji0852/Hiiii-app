@@ -1,4 +1,5 @@
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppToggleSwitch.dart';
+import 'package:Hiiii/MainPages/values.dart';
 import 'package:Hiiii/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -132,10 +133,8 @@ class ProfileState extends State<Profile> {
   Future<void> accountPresenceChecker() async {
     FirebaseUser uid = await FirebaseAuth.instance.currentUser();
 
-    var request = http.Request(
-        'GET',
-        Uri.parse('https://hiiiiapp.azurewebsites.net/api/authreader/?authid=' +
-            uid.uid));
+    var request = http.Request('GET',
+        Uri.parse('${Values.domain}HiiiiAppAuthCheck/?authid=' + uid.uid));
 
     http.StreamedResponse response = await request.send();
 

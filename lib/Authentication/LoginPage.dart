@@ -1,3 +1,5 @@
+import 'package:Hiiii/MainPages/values.dart';
+
 import './Otp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -170,10 +172,7 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> accountPresenceChecker() async {
     var request = http.Request(
-        'GET',
-        Uri.parse(
-            'https://hiiiiapp.azurewebsites.net/api/hiiiiaccountchecker/?phone=' +
-                phone));
+        'GET', Uri.parse('${Values.domain}HiiiiAppPhoneCheck/?phone=' + phone));
 
     http.StreamedResponse response = await request.send();
 

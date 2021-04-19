@@ -32,9 +32,9 @@ class ListviewWidgetType1 extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
       decoration: BoxDecoration(
-          color: HexColor('#262626'), borderRadius: BorderRadius.circular(20)),
+          color: HexColor('#262626'), borderRadius: BorderRadius.circular(35)),
       child: Padding(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
         child: Column(
           children: [
             Row(
@@ -83,7 +83,8 @@ class ListviewWidgetType1 extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
+            //container, which contains the name of the ride sharer and starting time of the ride.
             Container(
               child: Padding(
                 padding: EdgeInsets.all(10),
@@ -114,7 +115,8 @@ class ListviewWidgetType1 extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
+            //container, containing the source and destination of the ride.
             Container(
               decoration: BoxDecoration(
                   color: Colors.black, borderRadius: BorderRadius.circular(15)),
@@ -152,8 +154,10 @@ class ListviewWidgetType1 extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 15,
+              height: 5,
             ),
+            //container containing the ridedecription. The container will be displayed, if the
+            //ridedescription string is not equal to null
             if (rideDescription.length > 0)
               Container(
                 width: MediaQuery.of(context).size.width,
@@ -174,11 +178,20 @@ class ListviewWidgetType1 extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            HiiiiAppMiniButton2(
-              text: 'Request',
-              onchange: () {},
-              color: Colors.black,
-              fontColor: Colors.white,
+            //Request for ride button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                HiiiiAppMiniButton2(
+                  text: 'Request',
+                  onchange: () {},
+                  color: Colors.black,
+                  fontColor: Colors.white,
+                ),
+                SizedBox(
+                  width: 30,
+                )
+              ],
             )
           ],
         ),

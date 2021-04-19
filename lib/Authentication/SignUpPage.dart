@@ -1,3 +1,4 @@
+import 'package:Hiiii/MainPages/values.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -404,8 +405,7 @@ class SignUpPageState extends State<SignUpPage> {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'https://hiiiiapp.azurewebsites.net/api/hiiiiaccountchecker/?phone=' +
-                phoneNumber.text));
+            '${Values.domain}HiiiiAppPhoneCheck/?phone=' + phoneNumber.text));
 
     http.StreamedResponse response = await request.send();
 

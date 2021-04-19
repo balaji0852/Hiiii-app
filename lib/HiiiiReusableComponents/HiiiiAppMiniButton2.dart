@@ -17,7 +17,7 @@ class HiiiiAppMiniButton2 extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Text(
           text,
-          style: TextStyle(color: fontColor, fontSize: 12),
+          style: TextStyle(color: fontColor, fontSize: 11),
         ),
         color: color,
         onPressed: onchange,

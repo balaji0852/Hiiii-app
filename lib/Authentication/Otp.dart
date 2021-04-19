@@ -1,4 +1,5 @@
 import 'package:Hiiii/Home.dart';
+import 'package:Hiiii/MainPages/values.dart';
 import 'package:Hiiii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -155,9 +156,7 @@ class OtpState extends State<Otp> {
 
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request(
-        'POST',
-        Uri.parse(
-            'https://hiiiiapp.azurewebsites.net/api/hiiiiappAuthentication'));
+        'POST', Uri.parse('${Values.domain}HiiiiAppAccountCreation'));
     request.body = payload.toString();
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();

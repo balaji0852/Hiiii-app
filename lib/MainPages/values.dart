@@ -68,4 +68,6 @@ class Values {
   static const List<String> vehiclesList = ['car', 'bike'];
 
   static Color green = HexColor('#8FFF29');
+
+  static const String domain = "https://hiiiiappservice.azurewebsites.net/api/";
 }

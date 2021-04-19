@@ -173,10 +173,8 @@ class RideState extends State<Ride> {
       });
 
       var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'POST',
-          Uri.parse(
-              'https://hiiiiappservice.azurewebsites.net/api/hiiiiappridepost'));
+      var request =
+          http.Request('POST', Uri.parse('${Values.domain}HiiiiAppRidePost'));
       request.body = payload.toString();
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
@@ -184,6 +182,9 @@ class RideState extends State<Ride> {
           convert.jsonDecode(await response.stream.bytesToString());
       String toast;
       if (jsonResponse['status'] == 200) {
+        from.text = "";
+        to.text = "";
+        rideDescription.text = "";
         print('ride posted sucessfully');
         toast = 'Your ride is posted succesfully...';
       } else {

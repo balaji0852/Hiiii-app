@@ -1,5 +1,6 @@
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppTitleBlock2.dart';
 import 'package:Hiiii/MainPages/PostPages/Ride.dart';
+import 'package:Hiiii/MainPages/values.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
@@ -99,8 +100,8 @@ class PostPageState extends State<PostPage> {
   Future<void> serviceListGetter() async {
     // FirebaseUser uid = await FirebaseAuth.instance.currentUser();
 
-    var request = http.Request('GET',
-        Uri.parse('https://hiiiiapp.azurewebsites.net/api/ServiceList?'));
+    var request =
+        http.Request('GET', Uri.parse('${Values.domain}HiiiiAppServiceList'));
 
     http.StreamedResponse response = await request.send();
 
