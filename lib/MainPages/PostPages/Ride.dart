@@ -169,7 +169,8 @@ class RideState extends State<Ride> {
         "noSeats": seat.toString(),
         "rideDescription": rideDescription.text,
         "uid": user.uid.toString(),
-        "rideStartDate": date.substring(0, 10) + " " + time
+        "rideStartDate": date.substring(0, 10) + " " + time,
+        "actionDate": DateTime.now().toString().substring(0, 16)
       });
 
       var headers = {'Content-Type': 'application/json'};

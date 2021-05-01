@@ -1,3 +1,4 @@
+import 'package:Hiiii/MainPages/ActionPage.dart';
 import 'package:Hiiii/MainPages/PostPage.dart';
 import 'package:Hiiii/MainPages/RidePage.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,15 +14,7 @@ class HomeState extends State<Home> {
   int body = 0;
   final items = [
     RidePage(),
-    Center(
-      child: Text(
-        "No Rides data available",
-        style: TextStyle(
-          fontSize: 16,
-          color: Colors.white,
-        ),
-      ),
-    ),
+    ActionPage(),
     Center(
       child: Text(
         "No Chat data available",

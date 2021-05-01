@@ -1,6 +1,7 @@
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppListViewWidgets/ListviewWidgetType1.dart';
 import 'package:Hiiii/HiiiiReusableComponents/HiiiiAppMiniButton2.dart';
 import 'package:Hiiii/MainPages/values.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,12 +18,13 @@ class RidePageState extends State<RidePage> {
   var eventsData = [];
   int status = 200;
   String toast = "finding rides near by you...";
+  String userName;
 
   @override
   void initState() {
     super.initState();
-    toast = "finding rides near by you...";
     getEvent();
+    accountPresenceChecker();
   }
 
   @override
@@ -73,6 +75,9 @@ class RidePageState extends State<RidePage> {
                       to: event['to_'],
                       vehicleType: event['vehicleType'],
                       seats: event['noSeats'].toString(),
+                      onChange: () {
+                        request(event);
+                      },
                     );
                   }).toList())
                 : Center(
@@ -98,7 +103,7 @@ class RidePageState extends State<RidePage> {
     http.StreamedResponse response = await request.send();
 
     var jsonResponse =
-        convert.jsonDecode(await response.stream.bytesToString());
+        await convert.jsonDecode(await response.stream.bytesToString());
 
     setState(() {
       if (jsonResponse['status'] != 200) {
@@ -108,5 +113,74 @@ class RidePageState extends State<RidePage> {
       loading = false;
       eventsData = jsonResponse['events'];
     });
+  }
+
+  Future<void> request(var event) async {
+    FirebaseUser uid = await FirebaseAuth.instance.currentUser();
+    String toast = " ";
+    SnackBar snackBar;
+    if (event['noSeats'] == 0) {
+      toast = "Oops, No seats left out...";
+    } else if (uid.uid == event['uid']) {
+      toast = "Hey Buddy, you can't make request to your own ride...";
+    } else {
+      var payload = convert.jsonEncode(<String, String>{
+        "requesteeUid": event['uid'],
+        "requesterUid": uid.uid,
+        "eventId": event['eventId'],
+        "requesteeName": "Hoomann",
+        "from_": event['from_'],
+        "to_": event['to_'],
+        "rideStartDate": event['rideStartDate'],
+        "actionDate": DateTime.now().toString().substring(0, 16),
+        "requesterName": userName
+      });
+
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request(
+          'POST', Uri.parse('${Values.domain}HiiiiAppActionRequestRide'));
+      request.body = payload.toString();
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      var jsonResponse =
+          convert.jsonDecode(await response.stream.bytesToString());
+      toast = "Sent request successfully...";
+      if (jsonResponse['status'] == 200) {
+        toast = "request sent..";
+      } else if (jsonResponse['status'] == 400) {
+        toast = "you have a request for this ride, already...";
+      } else {
+        toast = "Oops, try again later";
+      }
+    }
+    snackBar = SnackBar(
+      content: Text(
+        toast,
+        style: TextStyle(color: Colors.black),
+      ),
+      backgroundColor: Values.green,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> accountPresenceChecker() async {
+    FirebaseUser uid = await FirebaseAuth.instance.currentUser();
+
+    var request = http.Request('GET',
+        Uri.parse('${Values.domain}HiiiiAppAuthCheck/?authid=' + uid.uid));
+
+    http.StreamedResponse response = await request.send();
+
+    var jsonResponse =
+        convert.jsonDecode(await response.stream.bytesToString());
+
+    if (jsonResponse['status'] == 200) {
+      setState(() {
+        userName = jsonResponse['name'];
+      });
+    } else {
+      print("Account doesn't exists");
+    }
   }
 }
