@@ -1,8 +1,8 @@
 {
   "project_info": {
-    "project_number": "677624412893",
-    "project_id": "hyeapp-f9d84",
-    "storage_bucket": "hyeapp-f9d84.appspot.com"
+    "project_number": "empty",
+    "project_id": "empty",
+    "storage_bucket": "empty"
   },
   "client": [
     {
@@ -28,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB8WRkBpTp2-b2rZbnOXqvn2KrahQVnSLk"
+          "current_key": "empty"
         }
       ],
       "services": {
